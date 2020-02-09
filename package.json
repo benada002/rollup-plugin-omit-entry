@@ -1,0 +1,19 @@
+{
+  "name": "rollup-non-js-entry",
+  "version": "0.0.1",
+  "description": "Omits the js file of not js entry points.",
+  "source": "src/index.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "babel src/index.js --out-file dist/index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "jest": "^25.1.0"
+  }
+}

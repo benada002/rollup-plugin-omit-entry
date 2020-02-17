@@ -1,39 +1,35 @@
 export default (options = {}) => {
     const name = 'rollup-non-js-entry';
-    const pluginOptions = {
-        extensions: ['.css', '.styl', '.scss', '.sass', '.less'],
-        ...options
-    }
+    const extensions = options.extensions ?? ['.css', '.styl', '.scss', '.sass', '.less']
+    const onlyOnWrite = options.onlyOnWrite ?? false;
 
     return {
         name,
         options(options) {
-            const {plugins} = options;
-            const to = plugins.length - 2;
+            const { plugins } = options;
             const pluginIndex = plugins.findIndex(plugin => plugin.name === name);
 
             if(pluginIndex !== -1){
                 const pluginElement = plugins.splice(pluginIndex, 1)[0]
-                plugins.splice(to, 0, pluginElement);
+                plugins.push(pluginElement);
             }
 
             return options
         },
-        async generateBundle(options, bundle) {
-            const bundleKeys = Object.keys(bundle);
+        async generateBundle(options, bundle, isWrite) {
+            if(onlyOnWrite && !isWrite) return;
+            if(!Object.keys(bundle).length > 1) return;
 
-            if(bundleKeys.length > 1){
-                for(const key in bundle){
-                    const {isEntry, facadeModuleId} = bundle[key];
-                    if (isEntry && facadeModuleId) {
-                        pluginOptions.extensions.forEach(ele => {
-                            if(facadeModuleId.endsWith(ele)){
-                                delete bundle[key];
-                            }
-                        });
+            for(const key in bundle){
+                const {isEntry, facadeModuleId} = bundle[key];
+                if (isEntry && facadeModuleId) {
+                    extensions.forEach(ele => {
+                        if(facadeModuleId.endsWith(ele)){
+                            delete bundle[key];
+                        }
+                    });
 
-                        break;
-                    }
+                    break;
                 }
             }
 

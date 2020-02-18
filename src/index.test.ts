@@ -1,10 +1,10 @@
 import { rollup } from 'rollup';
-import postcss from 'rollup-plugin-postcss';
+import * as postcss from 'rollup-plugin-postcss';
 import omitEntry from './index';
 
 const extensions = ['.css', '.styl', '.scss', '.sass', '.less'];
 
-async function build(pluginOptions = {}, input = './test/assets/test.css'){
+async function build(pluginOptions = {}, input = './test/assets/test.css') {
     const build = await rollup({
         input,
         cache: false,
@@ -29,8 +29,8 @@ describe('rollup-non-js-entry', () => {
     it('should omit entry chunk', async () => {
         const { generate, write } = await build();
 
-        const {output: generateOutput} = await generate();
-        const {output: writeOutput} = await write();
+        const { output: generateOutput } = await generate();
+        const { output: writeOutput } = await write();
 
         expect(generateOutput).toEqual(
             expect.not.arrayContaining([
@@ -50,8 +50,8 @@ describe('rollup-non-js-entry', () => {
     });
 
     it('should omit entry chunk on write if onlyOnWrite is true', async () => {
-        const { write } = await build({onlyOnWrite: true});
-        const {output: writeOutput} = await write();
+        const { write } = await build({ onlyOnWrite: true });
+        const { output: writeOutput } = await write();
 
         expect(writeOutput).toEqual(
             expect.not.arrayContaining([
@@ -63,8 +63,8 @@ describe('rollup-non-js-entry', () => {
     });
 
     it('should not omit entry chunk on generate if onlyOnWrite is true', async () => {
-        const { generate } = await build({onlyOnWrite: true});
-        const {output: generateOutput} = await generate();
+        const { generate } = await build({ onlyOnWrite: true });
+        const { output: generateOutput } = await generate();
 
         expect(generateOutput).toEqual(
             expect.arrayContaining([
@@ -76,10 +76,10 @@ describe('rollup-non-js-entry', () => {
     });
 
     it('should omit entry chunk if extensions are matched', async () => {
-        const { generate, write } = await build({extensions});
+        const { generate, write } = await build({ extensions });
 
-        const {output: generateOutput} = await generate();
-        const {output: writeOutput} = await write();
+        const { output: generateOutput } = await generate();
+        const { output: writeOutput } = await write();
 
         expect(generateOutput).toEqual(
             expect.not.arrayContaining([
@@ -99,10 +99,10 @@ describe('rollup-non-js-entry', () => {
     });
 
     it('should not omit entry chunk if extensions are not matched', async () => {
-        const { generate, write } = await build({extensions}, './test/assets/test.js');
+        const { generate, write } = await build({ extensions }, './test/assets/test.js');
 
-        const {output: generateOutput} = await generate();
-        const {output: writeOutput} = await write();
+        const { output: generateOutput } = await generate();
+        const { output: writeOutput } = await write();
 
         expect(generateOutput).toEqual(
             expect.arrayContaining([

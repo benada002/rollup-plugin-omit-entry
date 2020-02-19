@@ -1,1 +1,1 @@
-# rollup-plugin-non-js-entry
+# rollup-plugin-omit-entry
